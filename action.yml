@@ -48,7 +48,7 @@ runs:
           echo '::endgroup::'     >&2
         }
 
-        local app_os='' app_arch='' app_url=''
+        declare app_os='' app_arch='' app_url=''
 
         case "${{ runner.os }}" in
           'macOS') app_os='mac' ;;
