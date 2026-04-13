@@ -1,10 +1,8 @@
-# setup-hcloud
+# 🌼 GitHub Action to Setup Huawei Cloud KooCLI - `hcloud`
 
 [![🧪 Testing](https://github.com/vbem/setup-hcloud/actions/workflows/test.yml/badge.svg)](https://github.com/vbem/setup-hcloud/actions/workflows/test.yml)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/vbem/setup-hcloud?label=Release&logo=github)](https://github.com/vbem/setup-hcloud/releases)
 [![Marketplace](https://img.shields.io/badge/GitHub%20Actions-Marketplace-blue?logo=github)](https://github.com/marketplace/actions/setup-hcloud)
-
-GitHub Action to Setup Huawei Cloud KooCLI - `hcloud`
 
 ## About
 
@@ -14,7 +12,7 @@ The [***KooCLI***](https://support.huaweicloud.com/hcli/index.html) is the offic
 
 ```yaml
 - name: Setup HW Cloud KooCLI
-  uses: vbem/setup-hcloud@v1
+  uses: vbem/setup-hcloud@main
 
 - name: Test CLI by HW Cloud STS service
   env:

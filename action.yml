@@ -2,7 +2,7 @@
 name: setup-hcloud
 author: "@vbem"
 description: 🌼 Setup Huawei Cloud KooCLI - `hcloud`
-branding: { icon: terminal, color: red }
+branding: { icon: terminal, color: gray-dark }
 inputs:
   agree-privacy:
     description: Whether to agree privacy statement when installing KooCLI, default to true
