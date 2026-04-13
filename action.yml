@@ -1,7 +1,7 @@
 ---
-name: 🌼 Setup Huawei Cloud KooCLI - `hcloud`
+name: setup-hcloud
 author: "@vbem"
-description: https://github.com/vbem/setup-hcloud
+description: 🌼 Setup Huawei Cloud KooCLI - `hcloud`
 branding: { icon: terminal, color: red }
 inputs:
   agree-privacy:
