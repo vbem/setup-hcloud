@@ -1,0 +1,91 @@
+---
+name: 🌼 Setup Huawei Cloud KooCLI - `hcloud`
+author: "@vbem"
+description: https://github.com/vbem/setup-hcloud
+branding: { icon: terminal, color: red }
+inputs:
+  agree-privacy:
+    description: Whether to agree privacy statement when installing KooCLI, default to true
+    required: false
+    default: "true"
+  check-version:
+    description: Whether to check KooCLI version after installation, default to true
+    required: false
+    default: "true"
+  base-url:
+    description: Base URL for KooCLI binary releases
+    required: false
+    default: https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/latest/
+outputs:
+  url:
+    description: "URL of official KooCLI package used for installation"
+    value: ${{ steps.unix.outputs.app_url }}
+  path:
+    description: "Path to KooCLI binary"
+    value: ${{ steps.unix.outputs.path }}
+  version:
+    description: "The checked KooCLI version"
+    value: ${{ steps.unix.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - if: runner.os == 'macOS' || runner.os == 'Linux'
+      id: unix
+      shell: bash
+      run: |
+        # implementation details
+
+        # Group stdin to stderr with title
+        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines
+        #   $1: group title
+        #   stdin: logs
+        #   stderr: grouped logs
+        #   $?: 0 if successful and non-zero otherwise
+        function kit::wf::group {
+          echo "::group::$1"      >&2
+          echo "$(< /dev/stdin)"  >&2
+          echo '::endgroup::'     >&2
+        }
+
+        local app_os='' app_arch='' app_url=''
+
+        case "${{ runner.os }}" in
+          'macOS') app_os='mac' ;;
+          'Linux') app_os='linux' ;;
+          *) echo "Unsupported Runner OS: '${{ runner.os }}'"; exit 1 ;;
+        esac
+
+        case "${{ runner.arch }}" in
+          'X64') app_arch='amd64' ;;
+          'ARM64') app_arch='arm64' ;;
+          *) echo "Unsupported Runner Architecture: '${{ runner.arch }}'"; exit 1 ;;
+        esac
+
+        app_url="${{ inputs.base-url }}huaweicloud-cli-${app_os}-${app_arch}.tar.gz"
+        echo "url=${app_url}" >> "$GITHUB_OUTPUT"
+        {
+          curl -fsSL | sudo tar -xzC /usr/local/bin hcloud
+          sudo chmod a+rx /usr/local/bin/hcloud
+          which hcloud
+          echo "path=$(which hcloud)" >> "$GITHUB_OUTPUT"
+        } &> | kit::wf::group "🌼 Install Huawei Cloud KooCLI"
+
+        if [[ '${{ inputs.agree-privacy }}' == 'true' ]]; then
+          hcloud configure set --cli-agree-privacy-statement=true &> \
+            | kit::wf::group "⚙️ Agree Privacy Statement for KooCLI"
+          if [[ '${{ inputs.check-version }}' == 'true' ]]; then
+            hcloud version | kit::wf::group "🔍 Check KooCLI Version"
+            echo "version=$(hcloud version)" >> "$GITHUB_OUTPUT"
+          fi
+        fi
+
+    - if: runner.os == 'Windows'
+      id: windows
+      shell: pwsh
+      run: |
+        curl -fsSL -O "${{ inputs.base-url }}huaweicloud-cli-windows-amd64.zip"
+        Expand-Archive -Path ./huaweicloud-cli-windows-amd64.zip -DestinationPath ./out
+        $env:PATH = "$env:PATH;$pwd/out"
+        which hcloud
+        hcloud version
