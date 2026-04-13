@@ -34,7 +34,7 @@ jobs:
 
       - name: "📊 Show the setup output"
         env:
-          STEP_OUTPUT: ${{ steps.setup.outputs }}
+          STEP_OUTPUT: ${{ toJson(steps.setup.outputs) }}
         run: jq -C <<<"$STEP_OUTPUT"
 
       - name: "🐞 Debug with command: ${{ inputs.cmd }}"
