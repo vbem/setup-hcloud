@@ -1,0 +1,42 @@
+---
+name: 🧪 Testing
+run-name: ${{ github.workflow }} - ${{ toJson(inputs) }}
+concurrency: { group: "${{ github.workflow }}" }
+env:
+  TZ: Asia/Shanghai
+
+on:
+  workflow_dispatch:
+    inputs:
+      cmd:
+        description: Command to execute, default to empty
+        required: false
+        type: string
+        default: ""
+      runs-on:
+        description: Runner, default to `"ubuntu-slim"`
+        required: false
+        type: string
+        default: '"ubuntu-slim"'
+
+jobs:
+  debug:
+    runs-on: ${{ fromJson(inputs.runs-on||'ubuntu-slim') }}
+    timeout-minutes: 5
+    steps:
+      - name: "📁 Checkout the repository"
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with: { persist-credentials: false }
+
+      - id: setup
+        name: "⚙️ Run the setup action"
+        uses: ./
+
+      - name: "📊 Show the setup output"
+        env:
+          STEP_OUTPUT: ${{ steps.setup.outputs }}
+        run: jq -C <<<"$STEP_OUTPUT"
+
+      - name: "🐞 Debug with command: ${{ inputs.cmd }}"
+        if: ${{ inputs.cmd }}
+        run: ${{ inputs.cmd }}
