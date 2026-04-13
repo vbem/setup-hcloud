@@ -19,7 +19,7 @@ inputs:
 outputs:
   url:
     description: "URL of official KooCLI package used for installation"
-    value: ${{ steps.unix.outputs.app_url }}
+    value: ${{ steps.unix.outputs.url }}
   path:
     description: "Path to KooCLI binary"
     value: ${{ steps.unix.outputs.path }}

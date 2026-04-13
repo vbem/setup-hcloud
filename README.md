@@ -1,5 +1,7 @@
 # setup-hcloud
 
+[![🧪 Testing](https://github.com/vbem/setup-hcloud/actions/workflows/test.yml/badge.svg)](https://github.com/vbem/setup-hcloud/actions/workflows/test.yml)
+
 GitHub Action to Setup Huawei Cloud KooCLI - `hcloud`
 
 ## About
