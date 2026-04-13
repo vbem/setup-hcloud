@@ -34,7 +34,7 @@ runs:
       id: unix
       shell: bash
       run: |
-        # implementation details
+        # `setup-hcloud` action implementation details
 
         # Group stdin to stderr with title
         # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines
